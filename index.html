@@ -1,215 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MonoCalc</title>
-    <style>
-        /* CSS Styling */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hockey Stick Selector</title>
+  <style>
+    :root {
+      --bg: #0b1320;
+      --card: #1F51FF;
+      --accent: #1fa2ff;
+      --text: #ffffff;
+      --muted: #9aa4b2;
+    }
 
-        body {
-            background-color: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: white;
-        }
+    * { box-sizing: border-box; }
 
-        .calculator {
-            width: 100%;
-            max-width: 375px; /* Mobile standard width */
-            padding: 20px;
-            background: #000;
-        }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(180deg, #05070d, var(--bg));
+      color: var(--text);
+      padding: 16px;
+    }
 
-        .display {
-            width: 100%;
-            height: 150px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            align-items: flex-end;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
+    h1 {
+      text-align: center;
+      margin-bottom: 8px;
+      font-size: 1.6rem;
+    }
 
-        #previous-operand {
-            color: #666;
-            font-size: 1.2rem;
-            margin-bottom: 5px;
-        }
+    p.subtitle {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+    }
 
-        #current-operand {
-            color: #fff;
-            font-size: 3.5rem;
-            word-wrap: break-word;
-            word-break: break-all;
-        }
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+    }
 
-        .buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-        }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
 
-        button {
-            aspect-ratio: 1/1;
-            border-radius: 50%; /* Circular mobile-style buttons */
-            border: none;
-            cursor: pointer;
-            font-size: 1.5rem;
-            font-weight: 500;
-            transition: opacity 0.2s, transform 0.1s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    select, input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      font-size: 1rem;
+      margin-bottom: 14px;
+    }
 
-        button:active {
-            transform: scale(0.92);
-            opacity: 0.7;
-        }
+    button {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      font-size: 1rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #1fa2ff, #12d8fa);
+      color: #000;
+      cursor: pointer;
+    }
 
-        /* Color Palette */
-        .btn-number {
-            background-color: #333;
-            color: white;
-        }
+    button:hover { opacity: 0.9; }
 
-        .btn-operator {
-            background-color: #fff;
-            color: black;
-        }
+    .results h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+    }
 
-        .btn-function {
-            background-color: #a5a5a5;
-            color: black;
-        }
+    .result-item {
+      background: #0e1627;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
 
-        .span-two {
-            grid-column: span 2;
-            aspect-ratio: auto;
-            border-radius: 50px;
-            justify-content: flex-start;
-            padding-left: 30px;
-        }
+    .result-item strong {
+      color: var(--accent);
+    }
 
-    </style>
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    @media (min-width: 700px) {
+      body { max-width: 520px; margin: auto; }
+    }
+  </style>
 </head>
 <body>
 
-    <div class="calculator">
-        <div class="display">
-            <div id="previous-operand"></div>
-            <div id="current-operand">0</div>
-        </div>
-        <div class="buttons">
-            <button class="btn-function" onclick="clearDisplay()">AC</button>
-            <button class="btn-function" onclick="deleteNumber()">DEL</button>
-            <button class="btn-function" onclick="appendOperator('%')">%</button>
-            <button class="btn-operator" onclick="appendOperator('÷')">÷</button>
-            
-            <button class="btn-number" onclick="appendNumber('7')">7</button>
-            <button class="btn-number" onclick="appendNumber('8')">8</button>
-            <button class="btn-number" onclick="appendNumber('9')">9</button>
-            <button class="btn-operator" onclick="appendOperator('×')">×</button>
-            
-            <button class="btn-number" onclick="appendNumber('4')">4</button>
-            <button class="btn-number" onclick="appendNumber('5')">5</button>
-            <button class="btn-number" onclick="appendNumber('6')">6</button>
-            <button class="btn-operator" onclick="appendOperator('-')">-</button>
-            
-            <button class="btn-number" onclick="appendNumber('1')">1</button>
-            <button class="btn-number" onclick="appendNumber('2')">2</button>
-            <button class="btn-number" onclick="appendNumber('3')">3</button>
-            <button class="btn-operator" onclick="appendOperator('+')">+</button>
-            
-            <button class="btn-number span-two" onclick="appendNumber('0')">0</button>
-            <button class="btn-number" onclick="appendNumber('.')">.</button>
-            <button class="btn-operator" onclick="compute()">=</button>
-        </div>
-    </div>
+  <h1>🏒 Hockey Stick Selector</h1>
+  <p class="subtitle">Find the perfect stick based on your playing style</p>
 
-    <script>
-        // JavaScript Logic
-        let currentOperand = '0';
-        let previousOperand = '';
-        let operation = undefined;
+  <div class="card">
+    <label>Position</label>
+    <select id="position">
+      <option value="forward">Forward</option>
+      <option value="defense">Defense</option>
+    </select>
 
-        const currentTextElement = document.getElementById('current-operand');
-        const previousTextElement = document.getElementById('previous-operand');
+    <label>Playing Style</label>
+    <select id="style">
+      <option value="shooter">Shooter</option>
+      <option value="playmaker">Playmaker</option>
+      <option value="twoWay">Two-Way</option>
+      <option value="defensive">Defensive</option>
+    </select>
 
-        function updateDisplay() {
-            currentTextElement.innerText = currentOperand;
-            if (operation != null) {
-                previousTextElement.innerText = `${previousOperand} ${operation}`;
-            } else {
-                previousTextElement.innerText = '';
-            }
-        }
+    <label>Height (cm)</label>
+    <input type="number" id="height" placeholder="e.g. 175" />
 
-        function appendNumber(number) {
-            if (number === '.' && currentOperand.includes('.')) return;
-            if (currentOperand === '0' && number !== '.') {
-                currentOperand = number.toString();
-            } else {
-                currentOperand = currentOperand.toString() + number.toString();
-            }
-            updateDisplay();
-        }
+    <label>Strength Level</label>
+    <select id="strength">
+      <option value="low">Beginner</option>
+      <option value="medium">Intermediate</option>
+      <option value="high">Advanced</option>
+    </select>
 
-        function appendOperator(op) {
-            if (currentOperand === '') return;
-            if (previousOperand !== '') {
-                compute();
-            }
-            operation = op;
-            previousOperand = currentOperand;
-            currentOperand = '';
-            updateDisplay();
-        }
+    <label>Shot</label>
+    <select id="shot">
+      <option value="left">Left</option>
+      <option value="right">Right</option>
+    </select>
 
-        function clearDisplay() {
-            currentOperand = '0';
-            previousOperand = '';
-            operation = undefined;
-            updateDisplay();
-        }
+    <button onclick="calculateStick()">Get Recommendation</button>
+  </div>
 
-        function deleteNumber() {
-            if (currentOperand === '0') return;
-            currentOperand = currentOperand.toString().slice(0, -1);
-            if (currentOperand === '') currentOperand = '0';
-            updateDisplay();
-        }
+  <div class="card results" id="results" style="display:none">
+    <h2>Your Recommended Stick</h2>
+    <div id="output"></div>
+  </div>
 
-        function compute() {
-            let computation;
-            const prev = parseFloat(previousOperand);
-            const current = parseFloat(currentOperand);
-            if (isNaN(prev) || isNaN(current)) return;
+  <footer>
+    1Code 2026
+  </footer>
 
-            switch (operation) {
-                case '+': computation = prev + current; break;
-                case '-': computation = prev - current; break;
-                case '×': computation = prev * current; break;
-                case '÷': computation = prev / current; break;
-                case '%': computation = prev % current; break;
-                default: return;
-            }
-            
-            currentOperand = computation.toString();
-            operation = undefined;
-            previousOperand = '';
-            updateDisplay();
-        }
-    </script>
+  <script>
+    const stickDatabase = [
+      // BAUER
+      { brand: 'Bauer', model: 'Vapor HyperLite', position: 'forward', kick: 'Low Kick Point', style: 'shooter', skill: 'advanced' },
+      { brand: 'Bauer', model: 'Nexus Sync', position: 'defense', kick: 'Mid Kick Point', style: 'twoWay', skill: 'intermediate' },
+      { brand: 'Bauer', model: 'Supreme Mach', position: 'defense', kick: 'High Kick Point', style: 'defensive', skill: 'advanced' },
+
+      // CCM
+      { brand: 'CCM', model: 'Ribcor Trigger 8 Pro', position: 'forward', kick: 'Low Kick Point', style: 'shooter', skill: 'advanced' },
+      { brand: 'CCM', model: 'Jetspeed FT6 Pro', position: 'forward', kick: 'Hybrid Kick Point', style: 'twoWay', skill: 'intermediate' },
+      { brand: 'CCM', model: 'Tacks AS-V Pro', position: 'defense', kick: 'Mid Kick Point', style: 'defensive', skill: 'advanced' },
+
+      // WARRIOR
+      { brand: 'Warrior', model: 'Covert QR5 Pro', position: 'forward', kick: 'Low Kick Point', style: 'shooter', skill: 'intermediate' },
+      { brand: 'Warrior', model: 'Alpha LX2 Pro', position: 'defense', kick: 'Mid Kick Point', style: 'twoWay', skill: 'intermediate' },
+      { brand: 'Warrior', model: 'Novium Pro', position: 'defense', kick: 'High Kick Point', style: 'defensive', skill: 'advanced' }
+    ];
+
+    function calculateStick() {
+      const position = document.getElementById('position').value;
+      const style = document.getElementById('style').value;
+      const height = parseInt(document.getElementById('height').value || 170);
+      const strength = document.getElementById('strength').value;
+      const shot = document.getElementById('shot').value;
+
+      // FLEX CALCULATION
+      let flex;
+      if (strength === 'low') flex = 55;
+      if (strength === 'medium') flex = 70;
+      if (strength === 'high') flex = 85;
+      if (height > 185) flex += 10;
+      if (height < 165) flex -= 5;
+
+      // SKILL LEVEL
+      const skillMap = {
+        low: 'beginner',
+        medium: 'intermediate',
+        high: 'advanced'
+      };
+      const skill = skillMap[strength];
+
+      // CURVE LOGIC
+      let curve;
+      if (style === 'shooter') curve = 'Mid Toe (Quick Release)';
+      if (style === 'playmaker') curve = 'Mid Heel (Control & Passing)';
+      if (style === 'twoWay') curve = 'Mid Curve (Balanced)';
+      if (style === 'defensive') curve = 'Heel Curve (Stability)';
+
+      // KICK POINT
+      let kickPoint;
+      if (position === 'forward') kickPoint = 'Low Kick Point';
+      if (position === 'defense') kickPoint = 'Mid / High Kick Point';
+
+      // LENGTH
+      let length;
+      if (height < 165) length = 'Junior / Cut Intermediate';
+      else if (height < 180) length = 'Intermediate';
+      else length = 'Senior';
+
+      // BRAND MODEL MATCHING (NO SCORING)
+      const matchedSticks = stickDatabase.filter(stick => {
+        return stick.position === position && stick.style === style;
+      });
+
+      const topPick = matchedSticks.length ? matchedSticks[0] : stickDatabase[0];
+
+      document.getElementById('results').style.display = 'block';
+      document.getElementById('output').innerHTML = `
+        <div class="result-item"><strong>Top Stick:</strong> ${topPick.brand} ${topPick.model}</div>
+        <div class="result-item"><strong>Flex:</strong> ${flex}</div>
+        <div class="result-item"><strong>Curve:</strong> ${curve}</div>
+        <div class="result-item"><strong>Kick Point:</strong> ${topPick.kick}</div>
+        <div class="result-item"><strong>Stick Length:</strong> ${length}</div>
+        <div class="result-item"><strong>Shot:</strong> ${shot.toUpperCase()}</div>
+        
+      `;
+    }
+  </script>
+
 </body>
 </html>
