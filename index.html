@@ -5,184 +5,203 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pedometer App</title>
 
+<link rel="manifest" href="manifest.json">
+
 <style>
 body{
-    font-family: Arial, sans-serif;
-    margin:0;
-    background:#0f172a;
-    color:white;
-    text-align:center;
+font-family: Arial, sans-serif;
+margin:0;
+background:#0f172a;
+color:white;
+text-align:center;
+}
+
+header{
+padding:15px;
+font-size:22px;
+font-weight:bold;
+background:#020617;
 }
 
 .container{
-    padding:20px;
-    max-width:500px;
-    margin:auto;
-}
-
-h1{
-    margin-bottom:10px;
-}
-
-.card{
-    background:#1e293b;
-    padding:20px;
-    border-radius:20px;
-    margin-top:15px;
+padding:20px;
 }
 
 .steps{
-    font-size:60px;
-    font-weight:bold;
+font-size:60px;
+margin:20px 0;
+font-weight:bold;
 }
 
 .distance{
-    font-size:28px;
-    margin-top:10px;
+font-size:22px;
+margin-bottom:20px;
 }
 
 button, select{
-    padding:12px 18px;
-    border:none;
-    border-radius:12px;
-    font-size:16px;
-    margin:5px;
+padding:12px 18px;
+margin:5px;
+border:none;
+border-radius:10px;
+font-size:16px;
+cursor:pointer;
 }
 
 button{
-    background:#22c55e;
-    color:white;
-    cursor:pointer;
+background:#22c55e;
+color:white;
 }
 
-button.secondary{
-    background:#3b82f6;
+button:hover{
+opacity:0.8;
 }
 
-button.danger{
-    background:#ef4444;
+canvas{
+background:white;
+border-radius:12px;
+margin-top:20px;
 }
 
-footer{
-    margin-top:20px;
-    font-size:12px;
-    opacity:.6;
+.footer{
+margin-top:15px;
+font-size:14px;
+opacity:0.7;
 }
 </style>
 </head>
 
 <body>
 
+<header>📱 Pedometer App</header>
+
 <div class="container">
 
-<h1>🚶 Pedometer</h1>
+<select id="unit">
+<option value="km">Kilometers</option>
+<option value="mi">Miles</option>
+</select>
 
-<div class="card">
-    <div class="steps" id="steps">0</div>
-    <div class="distance" id="distance">0 km</div>
+<div class="steps" id="steps">0</div>
+
+<div class="distance" id="distance">0 km</div>
+
+<button onclick="startTracking()">Start Walking</button>
+<button onclick="resetSteps()">Reset</button>
+<button onclick="shareResults()">Share</button>
+
+<canvas id="chart" width="350" height="200"></canvas>
+
+<div class="footer">
+Tip: Add to Home Screen to install like an app
 </div>
 
-<div class="card">
-    <select id="unit">
-        <option value="km">Kilometers</option>
-        <option value="mi">Miles</option>
-    </select>
-
-    <br><br>
-
-    <button onclick="start()">Start</button>
-    <button class="danger" onclick="reset()">Reset</button>
 </div>
 
-<div class="card">
-    <button class="secondary" onclick="shareResults()">Share Results</button>
-</div>
-
-<footer>
-Move your phone while walking for best results
-</footer>
-
-</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-let steps = Number(localStorage.getItem("steps")) || 0;
-let lastMagnitude = 0;
-let started = false;
+let steps = 0;
+let lastAccel = 0;
+let unit = "km";
 
 const stepsEl = document.getElementById("steps");
 const distanceEl = document.getElementById("distance");
-const unitSelect = document.getElementById("unit");
 
-function updateUI(){
-    stepsEl.textContent = steps;
+document.getElementById("unit").onchange = e=>{
+unit = e.target.value;
+updateDisplay();
+};
 
-    let km = steps * 0.0008; // average step length
-    let unit = unitSelect.value;
-
-    if(unit === "mi"){
-        distanceEl.textContent = (km * 0.621371).toFixed(2) + " miles";
-    } else {
-        distanceEl.textContent = km.toFixed(2) + " km";
-    }
-
-    localStorage.setItem("steps", steps);
+function startTracking(){
+if(typeof DeviceMotionEvent !== "undefined"){
+window.addEventListener("devicemotion", motionHandler);
+alert("Walking tracker started!");
+}else{
+alert("Motion tracking not supported.");
+}
 }
 
-updateUI();
+function motionHandler(e){
+let accel = e.accelerationIncludingGravity;
+let magnitude = Math.sqrt(accel.x*accel.x + accel.y*accel.y + accel.z*accel.z);
 
-function start(){
-    if(!("DeviceMotionEvent" in window)){
-        alert("Motion sensors not supported on this device");
-        return;
-    }
-
-    if(typeof DeviceMotionEvent.requestPermission === "function"){
-        DeviceMotionEvent.requestPermission()
-        .then(response => {
-            if(response === "granted") enableTracking();
-        });
-    } else {
-        enableTracking();
-    }
+if(magnitude > 12 && lastAccel <= 12){
+steps++;
+saveToday();
+updateDisplay();
+}
+lastAccel = magnitude;
 }
 
-function enableTracking(){
-    if(started) return;
-    started = true;
+function updateDisplay(){
+stepsEl.textContent = steps;
 
-    window.addEventListener("devicemotion", e => {
-        let acc = e.accelerationIncludingGravity;
-        let magnitude = Math.sqrt(acc.x*acc.x + acc.y*acc.y + acc.z*acc.z);
+let km = steps * 0.0008;
+let dist = unit==="km" ? km : km*0.621371;
 
-        if(Math.abs(magnitude - lastMagnitude) > 6){
-            steps++;
-            updateUI();
-        }
-
-        lastMagnitude = magnitude;
-    });
+distanceEl.textContent = dist.toFixed(2) + " " + unit;
+drawChart();
 }
 
-function reset(){
-    steps = 0;
-    updateUI();
+function resetSteps(){
+steps = 0;
+updateDisplay();
 }
 
-unitSelect.onchange = updateUI;
+function getTodayKey(){
+return "steps_"+new Date().toISOString().split("T")[0];
+}
+
+function saveToday(){
+localStorage.setItem(getTodayKey(), steps);
+}
+
+function loadHistory(){
+let data = {};
+for(let i=0;i<30;i++){
+let d = new Date();
+d.setDate(d.getDate()-i);
+let key = "steps_"+d.toISOString().split("T")[0];
+data[d.toLocaleDateString()] = localStorage.getItem(key)||0;
+}
+return data;
+}
+
+let chart;
+function drawChart(){
+let history = loadHistory();
+let labels = Object.keys(history).reverse();
+let values = Object.values(history).reverse();
+
+if(chart) chart.destroy();
+
+chart = new Chart(document.getElementById("chart"), {
+type:"line",
+data:{
+labels:labels,
+datasets:[{
+label:"Daily Steps",
+data:values,
+fill:false,
+tension:0.3
+}]
+}
+});
+}
 
 function shareResults(){
-    let text = `I walked ${steps} steps (${distanceEl.textContent}) using my Pedometer App!`;
+let text = `I walked ${steps} steps today! 🚶`;
 
-    if(navigator.share){
-        navigator.share({
-            title:"My Steps",
-            text:text
-        });
-    } else {
-        navigator.clipboard.writeText(text);
-        alert("Results copied to clipboard!");
-    }
+if(navigator.share){
+navigator.share({title:"My Steps", text:text});
+}else{
+navigator.clipboard.writeText(text);
+alert("Results copied to clipboard!");
 }
+}
+
+steps = localStorage.getItem(getTodayKey()) || 0;
+updateDisplay();
 </script>
 
 </body>
