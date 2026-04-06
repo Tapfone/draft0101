@@ -3,157 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Christmas 2026 Countdown</title>
+    <title>Green Clock & Date</title>
     <style>
-        :root {
-            --xmas-red: #d42426;
-            --xmas-green: #165b33;
-            --xmas-gold: #f8b229;
-            --snow-white: #f8f9fa;
-        }
-
+        /* Styling the background and text */
         body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--xmas-green);
-            background-image: radial-gradient(circle, #1a7a41 1px, transparent 1px);
-            background-size: 30px 30px;
-            color: var(--snow-white);
+            background-color: #2e7d32; /* A pleasant forest green */
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
+            margin: 0;
             text-align: center;
         }
 
+        /* Container for the display */
         .container {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 2rem;
-            border-radius: 20px;
-            border: 3px solid var(--xmas-gold);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            width: 90%;
-            max-width: 500px;
+            padding: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(5px);
         }
 
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--xmas-red);
-            text-shadow: 2px 2px 0px var(--snow-white);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            color: var(--xmas-gold);
+        #time {
+            font-size: 5rem;
             font-weight: bold;
+            margin-bottom: 0;
         }
 
-        #countdown {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-        }
-
-        .time-box {
-            background: var(--snow-white);
-            color: var(--xmas-red);
-            padding: 15px 5px;
-            border-radius: 10px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        .number {
-            display: block;
-            font-size: 2rem;
-            font-weight: 800;
-        }
-
-        .label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: var(--xmas-green);
-            font-weight: bold;
-        }
-
-        .footer {
-            margin-top: 2rem;
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        /* Mobile specific adjustments */
-        @media (max-width: 400px) {
-            h1 { font-size: 1.8rem; }
-            .number { font-size: 1.5rem; }
-            .time-box { padding: 10px 2px; }
+        #date {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-top: 10px;
+            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>🎄 Christmas</h1>
-        <div class="subtitle">December 25, 2026</div>
-
-        <div id="countdown">
-            <div class="time-box">
-                <span class="number" id="days">00</span>
-                <span class="label">Days</span>
-            </div>
-            <div class="time-box">
-                <span class="number" id="hours">00</span>
-                <span class="label">Hours</span>
-            </div>
-            <div class="time-box">
-                <span class="number" id="minutes">00</span>
-                <span class="label">Mins</span>
-            </div>
-            <div class="time-box">
-                <span class="number" id="seconds">00</span>
-                <span class="label">Secs</span>
-            </div>
-        </div>
-
-        <div class="footer">
-            Counting down to the most wonderful time of the year! 🎅
-        </div>
+        <div id="time">00:00:00</div>
+        <div id="date">Loading Date...</div>
     </div>
 
     <script>
-        function updateCountdown() {
-            // Set the target date: Dec 25, 2026 at midnight
-            const targetDate = new Date("December 25, 2026 00:00:00").getTime();
-            
-            const now = new Date().getTime();
-            const difference = targetDate - now;
+        function updateClock() {
+            const now = new Date();
 
-            if (difference > 0) {
-                const d = Math.floor(difference / (1000 * 60 * 60 * 24));
-                const h = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-                const s = Math.floor((difference % (1000 * 60)) / 1000);
+            // Format Time
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('time').textContent = `${hours}:${minutes}:${seconds}`;
 
-                document.getElementById("days").innerText = d.toString().padStart(2, '0');
-                document.getElementById("hours").innerText = h.toString().padStart(2, '0');
-                document.getElementById("minutes").innerText = m.toString().padStart(2, '0');
-                document.getElementById("seconds").innerText = s.toString().padStart(2, '0');
-            } else {
-                // If the date is passed
-                document.querySelector(".container").innerHTML = "<h1>Merry Christmas! 🎁</h1>";
-            }
+            // Format Date
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('date').textContent = now.toLocaleDateString(undefined, options);
         }
 
         // Update every second
-        setInterval(updateCountdown, 1000);
+        setInterval(updateClock, 1000);
         
-        // Run once immediately so there is no 1-second delay
-        updateCountdown();
+        // Run immediately on load
+        updateClock();
     </script>
 </body>
 </html>
