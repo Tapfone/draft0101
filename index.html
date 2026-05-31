@@ -1,208 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fast Food Spinner</title>
-    <style>
-        :root {
-            --primary-red: #d32f2f;
-            --wheel-border: #222;
-        }
-
-        body {
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            background-color: #f8f9fa;
-            touch-action: manipulation;
-            position: relative;
-            box-sizing: border-box;
-            padding-bottom: 60px; /* Leaves space so the footer doesn't overlap content */
-        }
-
-        h1 { margin-top: 20px; margin-bottom: 20px; color: #333; font-size: 1.6rem; text-align: center; }
-
-        .spinner-container {
-            position: relative;
-            width: 92vw;
-            max-width: 480px;
-            aspect-ratio: 1 / 1;
-            box-sizing: border-box;
-        }
-
-        .pointer {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 30px solid var(--wheel-border);
-            z-index: 25;
-        }
-
-        #start-hub {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 70px;
-            height: 70px;
-            background: #fff;
-            border: 4px solid var(--wheel-border);
-            border-radius: 50%;
-            z-index: 30;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            font-size: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
-            transition: 0.1s;
-        }
-
-        #start-hub:active { transform: translate(-50%, -50%) scale(0.9); }
-
-        canvas {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 6px solid var(--wheel-border);
-            box-sizing: border-box; /* Keeps the border within the dimensions for perfect alignment */
-            transition: transform 5s cubic-bezier(0.15, 0, 0.15, 1);
-        }
-
-        #result-container {
-            margin-top: 25px;
-            height: 50px;
-        }
-
-        .go-button {
-            display: none;
-            padding: 14px 28px;
-            background-color: #000;
-            color: white;
-            text-decoration: none;
-            border-radius: 30px;
-            font-weight: bold;
-            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
-
-        /* Updated Footer Styles */
-        footer {
-            position: absolute;
-            bottom: 15px;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            font-size: 0.9rem;
-            color: #000; /* Made text solid black */
-            font-weight: 500;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fast Food Spinner</title>
+<style>
+body{margin:0;background:#000;color:#fff;font-family:Arial,sans-serif;display:flex;flex-direction:column;min-height:100vh;align-items:center}
+header{background:#fff;color:#000;width:100%;text-align:center;padding:15px;font-size:2rem;font-weight:bold}
+.container{flex:1;display:flex;justify-content:center;align-items:center;flex-direction:column;padding:20px}
+.pointer{width:0;height:0;border-left:18px solid transparent;border-right:18px solid transparent;border-top:40px solid #fff;z-index:5;margin-bottom:-10px}
+#wheelWrap{position:relative}
+#wheel{border-radius:50%;box-shadow:0 0 30px rgba(255,255,255,.25);background:#111}
+#spinBtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:110px;height:110px;border-radius:50%;border:none;background:#fff;color:#000;font-weight:bold;font-size:1.2rem;cursor:pointer;z-index:4}
+#spinBtn:disabled{opacity:.5}
+footer{padding:15px}
+#popup{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;justify-content:center;align-items:center}
+.card{background:#111;padding:20px;border-radius:16px;text-align:center;border:1px solid #444}
+.card button,.card a{display:inline-block;margin-top:10px;padding:10px 16px;border-radius:8px;text-decoration:none;border:none}
+.card a{background:#fff;color:#000}
+</style>
 </head>
 <body>
+<header>Fast Food Spinner</header>
+<div class="container">
+<div class="pointer"></div>
+<div id="wheelWrap">
+<canvas id="wheel" width="500" height="500"></canvas>
+<button id="spinBtn">START</button>
+</div>
+</div>
+<footer>Tapfone © 2026</footer>
 
-    <h1>Fast Food Spinner</h1>
+<div id="popup">
+<div class="card">
+<h2 id="winner"></h2>
+<a id="orderLink" target="_blank">Order Now</a><br>
+<button onclick="popup.style.display='none'">Close</button>
+</div>
+</div>
 
-    <div class="spinner-container">
-        <div class="pointer"></div>
-        <div id="start-hub" onclick="spin()">SPIN</div>
-        <canvas id="wheel" width="600" height="600"></canvas>
-    </div>
+<script>
+const restaurants=[
+{name:"Subway",color:"#0B8F3A",url:"https://www.subway.com"},
+{name:"Pizza Hut",color:"#D71920",url:"https://www.pizzahut.ca"},
+{name:"Mucho Burrito",color:"#F58220",url:"https://muchoburrito.com"},
+{name:"Popeyes",color:"#F26B21",url:"https://www.popeyeschicken.ca"},
+{name:"A&W",color:"#A65A2A",url:"https://web.aw.ca"},
+{name:"Tim Hortons",color:"#B5121B",url:"https://www.timhortons.ca"},
+{name:"McDonald's",color:"#FFC300",url:"https://www.mcdonalds.com/ca"},
+{name:"Burger King",color:"#F05A28",url:"https://www.burgerking.ca"},
+{name:"Taco Bell",color:"#702F8A",url:"https://www.tacobell.ca"},
+{name:"Wendy's",color:"#D22630",url:"https://www.wendys.com/en-ca"},
+{name:"Domino's",color:"#006491",url:"https://www.dominos.ca"},
+{name:"KFC",color:"#C8102E",url:"https://www.kfc.ca"}
+];
 
-    <div id="result-container">
-        <a id="result-link" class="go-button" target="_blank"></a>
-    </div>
+const canvas=document.getElementById("wheel");
+const ctx=canvas.getContext("2d");
+const spinBtn=document.getElementById("spinBtn");
+const popup=document.getElementById("popup");
+let angle=0, spinning=false;
 
-    <footer>Tapfone &copy; 2026</footer>
+function drawWheel(){
+const arc=(Math.PI*2)/restaurants.length;
+ctx.clearRect(0,0,500,500);
+restaurants.forEach((r,i)=>{
+ctx.beginPath();
+ctx.moveTo(250,250);
+ctx.arc(250,250,240,i*arc,(i+1)*arc);
+ctx.fillStyle=r.color;
+ctx.fill();
+ctx.save();
+ctx.translate(250,250);
+ctx.rotate(i*arc+arc/2);
+ctx.fillStyle="#fff";
+ctx.font="bold 16px Arial";
+ctx.textAlign="right";
+ctx.fillText(r.name,220,6);
+ctx.restore();
+});
+ctx.beginPath();
+ctx.arc(250,250,70,0,Math.PI*2);
+ctx.fillStyle="#111";
+ctx.fill();
+}
+drawWheel();
 
-    <script>
-        const canvas = document.getElementById('wheel');
-        const ctx = canvas.getContext('2d');
-        const resultLink = document.getElementById('result-link');
+function beep(freq,dur){
+const a=new(window.AudioContext||window.webkitAudioContext)();
+const o=a.createOscillator();
+const g=a.createGain();
+o.connect(g);g.connect(a.destination);
+o.frequency.value=freq;o.start();
+g.gain.setValueAtTime(.1,a.currentTime);
+g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+dur/1000);
+o.stop(a.currentTime+dur/1000);
+}
 
-        const restaurants = [
-            { name: "McDonald's", color: "#FFC72C", text: "#000", url: "https://www.mcdonalds.com/ca/en-ca.html" },
-            { name: "Burger King", color: "#F5EBDC", text: "#000", url: "https://www.burgerking.ca/" },
-            { name: "Taco Bell", color: "#702082", text: "#fff", url: "https://www.tacobell.ca/" },
-            { name: "Wendy's", color: "#E21836", text: "#fff", url: "https://www.wendys.com/en-ca" },
-            { name: "Domino's", color: "#006491", text: "#fff", url: "https://www.dominos.ca/" },
-            { name: "KFC", color: "#A3080C", text: "#fff", url: "https://www.kfc.ca/" },
-            { name: "Subway", color: "#008C15", text: "#fff", url: "https://www.subway.com/en-CA" },
-            { name: "Pizza Hut", color: "#ee3124", text: "#fff", url: "https://www.pizzahut.ca/" },
-            { name: "Mucho Burrito", color: "#f7941d", text: "#000", url: "https://muchoburrito.com/" },
-            { name: "Popeyes", color: "#ff8200", text: "#000", url: "https://www.popeyeschicken.ca/" },
-            { name: "A&W", color: "#5c2f00", text: "#fff", url: "https://web.aw.ca/en/home" },
-            { name: "Tim Hortons", color: "#c8102e", text: "#fff", url: "https://www.timhortons.ca/" }
-        ];
+spinBtn.onclick=()=>{
+if(spinning)return;
+spinning=true;
+spinBtn.disabled=true;
+beep(400,100);
+const extra=3600+Math.random()*3600;
+angle+=extra;
+canvas.style.transition="transform 6s cubic-bezier(.17,.67,.12,.99)";
+canvas.style.transform=`rotate(${angle}deg)`;
 
-        let currentRotation = 0;
-        let isSpinning = false;
-        const sliceAngle = (2 * Math.PI) / restaurants.length;
-
-        function drawWheel() {
-            restaurants.forEach((res, i) => {
-                const angle = i * sliceAngle;
-                ctx.beginPath();
-                ctx.fillStyle = res.color;
-                ctx.moveTo(300, 300);
-                ctx.arc(300, 300, 300, angle, angle + sliceAngle);
-                ctx.fill();
-                ctx.strokeStyle = "#fff";
-                ctx.lineWidth = 1;
-                ctx.stroke();
-
-                ctx.save();
-                ctx.translate(300, 300);
-                ctx.rotate(angle + sliceAngle / 2);
-                ctx.textAlign = "right";
-                ctx.fillStyle = res.text;
-                ctx.font = "bold 16px Arial";
-                ctx.fillText(res.name, 280, 5);
-                ctx.restore();
-            });
-        }
-
-        function spin() {
-            if (isSpinning) return;
-            isSpinning = true;
-            resultLink.style.display = 'none';
-            
-            const spinDegrees = (360 * 10) + Math.floor(Math.random() * 360);
-            currentRotation += spinDegrees;
-            canvas.style.transform = `rotate(${currentRotation}deg)`;
-
-            setTimeout(() => {
-                isSpinning = false;
-                calculateWinner();
-            }, 5000);
-        }
-
-        function calculateWinner() {
-            const normalized = (currentRotation % 360);
-            const winningAngle = (360 - normalized + 270) % 360;
-            const index = Math.floor(winningAngle / (360 / restaurants.length));
-            const winner = restaurants[index];
-
-            resultLink.href = winner.url;
-            resultLink.innerText = `ORDER ${winner.name.toUpperCase()} ➔`;
-            resultLink.style.display = 'inline-block';
-            resultLink.style.backgroundColor = winner.color;
-            resultLink.style.color = winner.text;
-        }
-
-        drawWheel();
-    </script>
+setTimeout(()=>{
+const seg=360/restaurants.length;
+const normalized=(360-(angle%360)+90)%360;
+const index=Math.floor(normalized/seg)%restaurants.length;
+const winner=restaurants[index];
+document.getElementById("winner").textContent="Winner: "+winner.name;
+document.getElementById("orderLink").href=winner.url;
+popup.style.display="flex";
+beep(800,300);
+spinning=false;
+spinBtn.disabled=false;
+},6000);
+};
+</script>
 </body>
 </html>
