@@ -1,125 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fast Food Spinner</title>
-<style>
-body{margin:0;background:#000;color:#fff;font-family:Arial,sans-serif;display:flex;flex-direction:column;min-height:100vh;align-items:center}
-header{background:#fff;color:#000;width:100%;text-align:center;padding:15px;font-size:2rem;font-weight:bold}
-.container{flex:1;display:flex;justify-content:center;align-items:center;flex-direction:column;padding:20px}
-.pointer{width:0;height:0;border-left:18px solid transparent;border-right:18px solid transparent;border-top:40px solid #fff;z-index:5;margin-bottom:-10px}
-#wheelWrap{position:relative}
-#wheel{border-radius:50%;box-shadow:0 0 30px rgba(255,255,255,.25);background:#111}
-#spinBtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:110px;height:110px;border-radius:50%;border:none;background:#fff;color:#000;font-weight:bold;font-size:1.2rem;cursor:pointer;z-index:4}
-#spinBtn:disabled{opacity:.5}
-footer{padding:15px}
-#popup{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;justify-content:center;align-items:center}
-.card{background:#111;padding:20px;border-radius:16px;text-align:center;border:1px solid #444}
-.card button,.card a{display:inline-block;margin-top:10px;padding:10px 16px;border-radius:8px;text-decoration:none;border:none}
-.card a{background:#fff;color:#000}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --card-bg: #ffffff;
+            
+            /* Brand Colors */
+            --facebook: #1877F2;
+            --instagram: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            --linkedin: #0077B5;
+            --pinterest: #E60023;
+            --reddit: #FF4500;
+            --snapchat: #FFFC00;
+            --tiktok: #000000;
+            --x-twitter: #14171A;
+            --youtube: #FF0000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header Styling */
+        header {
+            background-color: var(--card-bg);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #222;
+        }
+
+        /* Main Content Container */
+        main {
+            flex: 1;
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Grid Layout for Buttons */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            width: 100%;
+        }
+
+        /* Desktop Optimization (2 columns if screen is wider) */
+        @media (min-width: 480px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Base Button Styling */
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+        }
+
+        .social-btn i {
+            margin-right: 12px;
+            font-size: 1.4rem;
+        }
+
+        /* Active click states for mobile */
+        .social-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* Hover states for desktop */
+        @media (hover: hover) {
+            .social-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            }
+        }
+
+        /* Specific Brand Backgrounds */
+        .btn-facebook { background-color: var(--facebook); }
+        .btn-instagram { background: var(--instagram); }
+        .btn-linkedin { background-color: var(--linkedin); }
+        .btn-pinterest { background-color: var(--pinterest); }
+        .btn-reddit { background-color: var(--reddit); }
+        
+        .btn-snapchat { 
+            background-color: var(--snapchat); 
+            color: #000; /* Dark text for readability on yellow */
+        }
+        
+        .btn-tiktok { background-color: var(--tiktok); }
+        .btn-x { background-color: var(--x-twitter); }
+        .btn-youtube { background-color: var(--youtube); }
+
+        /* Footer Styling */
+        footer {
+            background-color: var(--card-bg);
+            text-align: center;
+            padding: 15px;
+            font-size: 0.9rem;
+            color: #666;
+            border-top: 1px solid #eee;
+        }
+    </style>
 </head>
 <body>
-<header>Fast Food Spinner</header>
-<div class="container">
-<div class="pointer"></div>
-<div id="wheelWrap">
-<canvas id="wheel" width="500" height="500"></canvas>
-<button id="spinBtn">START</button>
-</div>
-</div>
-<footer>Tapfone © 2026</footer>
 
-<div id="popup">
-<div class="card">
-<h2 id="winner"></h2>
-<a id="orderLink" target="_blank">Order Now</a><br>
-<button onclick="popup.style.display='none'">Close</button>
-</div>
-</div>
+    <header>
+        <h1>Social Media</h1>
+    </header>
 
-<script>
-const restaurants=[
-{name:"Subway",color:"#0B8F3A",url:"https://www.subway.com"},
-{name:"Pizza Hut",color:"#D71920",url:"https://www.pizzahut.ca"},
-{name:"Mucho Burrito",color:"#F58220",url:"https://muchoburrito.com"},
-{name:"Popeyes",color:"#F26B21",url:"https://www.popeyeschicken.ca"},
-{name:"A&W",color:"#A65A2A",url:"https://web.aw.ca"},
-{name:"Tim Hortons",color:"#B5121B",url:"https://www.timhortons.ca"},
-{name:"McDonald's",color:"#FFC300",url:"https://www.mcdonalds.com/ca"},
-{name:"Burger King",color:"#F05A28",url:"https://www.burgerking.ca"},
-{name:"Taco Bell",color:"#702F8A",url:"https://www.tacobell.ca"},
-{name:"Wendy's",color:"#D22630",url:"https://www.wendys.com/en-ca"},
-{name:"Domino's",color:"#006491",url:"https://www.dominos.ca"},
-{name:"KFC",color:"#C8102E",url:"https://www.kfc.ca"}
-];
+    <main>
+        <div class="grid-container">
+            <a href="https://www.facebook.com" target="_blank" class="social-btn btn-facebook" data-platform="Facebook">
+                <i class="fab fa-facebook-f"></i> Facebook
+            </a>
+            <a href="https://www.instagram.com" target="_blank" class="social-btn btn-instagram" data-platform="Instagram">
+                <i class="fab fa-instagram"></i> Instagram
+            </a>
+            <a href="https://www.linkedin.com" target="_blank" class="social-btn btn-linkedin" data-platform="LinkedIn">
+                <i class="fab fa-linkedin-in"></i> LinkedIn
+            </a>
+            <a href="https://www.pinterest.com" target="_blank" class="social-btn btn-pinterest" data-platform="Pinterest">
+                <i class="fab fa-pinterest"></i> Pinterest
+            </a>
+            <a href="https://www.reddit.com" target="_blank" class="social-btn btn-reddit" data-platform="Reddit">
+                <i class="fab fa-reddit-alien"></i> Reddit
+            </a>
+            <a href="https://www.snapchat.com" target="_blank" class="social-btn btn-snapchat" data-platform="Snapchat">
+                <i class="fab fa-snapchat"></i> Snapchat
+            </a>
+            <a href="https://www.tiktok.com" target="_blank" class="social-btn btn-tiktok" data-platform="TikTok">
+                <i class="fab fa-tiktok"></i> TikTok
+            </a>
+            <a href="https://www.x.com" target="_blank" class="social-btn btn-x" data-platform="X">
+                <i class="fab fa-x-twitter"></i> X
+            </a>
+            <a href="https://www.youtube.com" target="_blank" class="social-btn btn-youtube" data-platform="YouTube">
+                <i class="fab fa-youtube"></i> YouTube
+            </a>
+        </div>
+    </main>
 
-const canvas=document.getElementById("wheel");
-const ctx=canvas.getContext("2d");
-const spinBtn=document.getElementById("spinBtn");
-const popup=document.getElementById("popup");
-let angle=0, spinning=false;
+    <footer>
+        <p>Tapfone &copy; 2026</p>
+    </footer>
 
-function drawWheel(){
-const arc=(Math.PI*2)/restaurants.length;
-ctx.clearRect(0,0,500,500);
-restaurants.forEach((r,i)=>{
-ctx.beginPath();
-ctx.moveTo(250,250);
-ctx.arc(250,250,240,i*arc,(i+1)*arc);
-ctx.fillStyle=r.color;
-ctx.fill();
-ctx.save();
-ctx.translate(250,250);
-ctx.rotate(i*arc+arc/2);
-ctx.fillStyle="#fff";
-ctx.font="bold 16px Arial";
-ctx.textAlign="right";
-ctx.fillText(r.name,220,6);
-ctx.restore();
-});
-ctx.beginPath();
-ctx.arc(250,250,70,0,Math.PI*2);
-ctx.fillStyle="#111";
-ctx.fill();
-}
-drawWheel();
-
-function beep(freq,dur){
-const a=new(window.AudioContext||window.webkitAudioContext)();
-const o=a.createOscillator();
-const g=a.createGain();
-o.connect(g);g.connect(a.destination);
-o.frequency.value=freq;o.start();
-g.gain.setValueAtTime(.1,a.currentTime);
-g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+dur/1000);
-o.stop(a.currentTime+dur/1000);
-}
-
-spinBtn.onclick=()=>{
-if(spinning)return;
-spinning=true;
-spinBtn.disabled=true;
-beep(400,100);
-const extra=3600+Math.random()*3600;
-angle+=extra;
-canvas.style.transition="transform 6s cubic-bezier(.17,.67,.12,.99)";
-canvas.style.transform=`rotate(${angle}deg)`;
-
-setTimeout(()=>{
-const seg=360/restaurants.length;
-const normalized=(360-(angle%360)+90)%360;
-const index=Math.floor(normalized/seg)%restaurants.length;
-const winner=restaurants[index];
-document.getElementById("winner").textContent="Winner: "+winner.name;
-document.getElementById("orderLink").href=winner.url;
-popup.style.display="flex";
-beep(800,300);
-spinning=false;
-spinBtn.disabled=false;
-},6000);
-};
-</script>
+    <script>
+        // JavaScript functionality to handle interactions or analytics logging
+        document.querySelectorAll('.social-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const platform = button.getAttribute('data-platform');
+                console.log(`User is navigating to: ${platform}`);
+                
+                // You can add custom analytical triggers or app-routing logic here if needed
+            });
+        });
+    </script>
 </body>
 </html>
