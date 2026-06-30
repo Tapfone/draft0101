@@ -1,1 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Clock App</title>
+    <style>
+        /* Reset and Base Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
 
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* TikTok Style Container (9:16 Aspect Ratio) */
+        .app-container {
+            width: 100vw;
+            height: 100vh;
+            max-width: 430px; /* Standard phone width */
+            max-height: 764px; /* 9:16 aspect ratio relative to width */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 20px;
+            background-color: #000000;
+            border: 1px solid #222; /* Subtle border to define the screen on desktop */
+            border-radius: 16px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        /* Fallback for full screen on actual mobile devices */
+        @media (max-width: 480px) {
+            .app-container {
+                border: none;
+                border-radius: 0;
+                max-height: 100vh;
+            }
+        }
+
+        /* Clock Display Components */
+        .clock-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .time-display {
+            font-size: 4.5rem;
+            font-weight: 700;
+            letter-spacing: -2px;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .am-pm {
+            font-size: 1.5rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            color: #888888; /* Slightly dimmed for visual hierarchy */
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .date-display {
+            font-size: 1.25rem;
+            font-weight: 300;
+            color: #cccccc;
+            letter-spacing: 1px;
+        }
+
+        /* Footer Styling */
+        footer {
+            font-size: 0.9rem;
+            color: #555555;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <div class="clock-wrapper">
+            <div class="time-display" id="time">00:00:00</div>
+            <div class="am-pm" id="ampm">AM</div>
+            <div class="date-display" id="date">Loading Date...</div>
+        </div>
+
+        <footer>Tapfone &copy; 2026</footer>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            
+            // Get current time components
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            // Determine AM/PM
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            // Convert to 12-hour format
+            hours = hours % 12;
+            hours = hours ? hours : 12; // The hour '0' should be '12'
+            const formattedHours = String(hours).padStart(2, '0');
+            
+            // Update Time HTML
+            document.getElementById('time').textContent = `${formattedHours}:${minutes}:${seconds}`;
+            document.getElementById('ampm').textContent = ampm;
+            
+            // Format and Update Date (e.g., "Thursday, October 15, 2026")
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = now.toLocaleDateString('en-US', options);
+            document.getElementById('date').textContent = formattedDate;
+        }
+
+        // Run the clock instantly on load, then update every second
+        updateClock();
+        setInterval(updateClock, 1000);
+    </script>
+</body>
+</html>
