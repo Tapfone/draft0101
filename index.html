@@ -1,139 +1,263 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Clock App</title>
-    <style>
-        /* Reset and Base Styling */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tic Tac Toe</title>
 
-        body {
-            background-color: #000000;
-            color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
-        }
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
 
-        /* TikTok Style Container (9:16 Aspect Ratio) */
-        .app-container {
-            width: 100vw;
-            height: 100vh;
-            max-width: 430px; /* Standard phone width */
-            max-height: 764px; /* 9:16 aspect ratio relative to width */
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            padding: 40px 20px;
-            background-color: #000000;
-            border: 1px solid #222; /* Subtle border to define the screen on desktop */
-            border-radius: 16px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
-            position: relative;
-        }
+body{
+background:#ffffff;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
 
-        /* Fallback for full screen on actual mobile devices */
-        @media (max-width: 480px) {
-            .app-container {
-                border: none;
-                border-radius: 0;
-                max-height: 100vh;
-            }
-        }
+.phone{
+width:100%;
+max-width:430px;
+aspect-ratio:9/16;
+background:#ffffff;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
 
-        /* Clock Display Components */
-        .clock-wrapper {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
+.container{
+background:#000;
+color:#fff;
+width:100%;
+height:100%;
+border-radius:25px;
+display:flex;
+flex-direction:column;
+align-items:center;
+padding:25px;
+box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
 
-        .time-display {
-            font-size: 4.5rem;
-            font-weight: 700;
-            letter-spacing: -2px;
-            line-height: 1;
-            margin-bottom: 10px;
-        }
+h1{
+font-size:34px;
+margin-bottom:15px;
+}
 
-        .am-pm {
-            font-size: 1.5rem;
-            font-weight: 400;
-            text-transform: uppercase;
-            color: #888888; /* Slightly dimmed for visual hierarchy */
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-        }
+#status{
+font-size:22px;
+margin-bottom:25px;
+font-weight:bold;
+text-align:center;
+min-height:30px;
+}
 
-        .date-display {
-            font-size: 1.25rem;
-            font-weight: 300;
-            color: #cccccc;
-            letter-spacing: 1px;
-        }
+.board{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:12px;
+width:100%;
+max-width:320px;
+}
 
-        /* Footer Styling */
-        footer {
-            font-size: 0.9rem;
-            color: #555555;
-            letter-spacing: 1px;
-        }
-    </style>
+.cell{
+background:#111;
+border:3px solid #fff;
+aspect-ratio:1;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:64px;
+font-weight:bold;
+cursor:pointer;
+border-radius:18px;
+transition:.2s;
+user-select:none;
+}
+
+.cell:hover{
+background:#222;
+}
+
+.reset{
+margin-top:30px;
+width:100%;
+max-width:320px;
+padding:16px;
+background:#000;
+color:#fff;
+border:2px solid #fff;
+font-size:22px;
+font-weight:bold;
+border-radius:14px;
+cursor:pointer;
+transition:.2s;
+}
+
+.reset:hover{
+background:#222;
+}
+
+.footer{
+margin-top:auto;
+font-size:18px;
+padding-top:20px;
+color:#fff;
+}
+</style>
 </head>
+
 <body>
 
-    <div class="app-container">
-        <div class="clock-wrapper">
-            <div class="time-display" id="time">00:00:00</div>
-            <div class="am-pm" id="ampm">AM</div>
-            <div class="date-display" id="date">Loading Date...</div>
-        </div>
+<div class="phone">
 
-        <footer>Tapfone &copy; 2026</footer>
-    </div>
+<div class="container">
 
-    <script>
-        function updateClock() {
-            const now = new Date();
-            
-            // Get current time components
-            let hours = now.getHours();
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            
-            // Determine AM/PM
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            
-            // Convert to 12-hour format
-            hours = hours % 12;
-            hours = hours ? hours : 12; // The hour '0' should be '12'
-            const formattedHours = String(hours).padStart(2, '0');
-            
-            // Update Time HTML
-            document.getElementById('time').textContent = `${formattedHours}:${minutes}:${seconds}`;
-            document.getElementById('ampm').textContent = ampm;
-            
-            // Format and Update Date (e.g., "Thursday, October 15, 2026")
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const formattedDate = now.toLocaleDateString('en-US', options);
-            document.getElementById('date').textContent = formattedDate;
-        }
+<h1>Tic Tac Toe</h1>
 
-        // Run the clock instantly on load, then update every second
-        updateClock();
-        setInterval(updateClock, 1000);
-    </script>
+<div id="status">
+Player X's Turn
+</div>
+
+<div class="board">
+
+<div class="cell" data-index="0"></div>
+<div class="cell" data-index="1"></div>
+<div class="cell" data-index="2"></div>
+
+<div class="cell" data-index="3"></div>
+<div class="cell" data-index="4"></div>
+<div class="cell" data-index="5"></div>
+
+<div class="cell" data-index="6"></div>
+<div class="cell" data-index="7"></div>
+<div class="cell" data-index="8"></div>
+
+</div>
+
+<button class="reset" onclick="resetGame()">
+Reset Game
+</button>
+
+<div class="footer">
+Tapfone © 2026
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const cells=document.querySelectorAll(".cell");
+const status=document.getElementById("status");
+
+let board=["","","","","","","","",""];
+let currentPlayer="X";
+let gameRunning=true;
+
+const wins=[
+[0,1,2],
+[3,4,5],
+[6,7,8],
+[0,3,6],
+[1,4,7],
+[2,5,8],
+[0,4,8],
+[2,4,6]
+];
+
+cells.forEach(cell=>{
+cell.addEventListener("click",cellClicked);
+});
+
+function cellClicked(){
+
+const index=this.dataset.index;
+
+if(board[index]!=="" || !gameRunning)
+return;
+
+board[index]=currentPlayer;
+this.textContent=currentPlayer;
+
+checkWinner();
+
+}
+
+function checkWinner(){
+
+let won=false;
+
+for(let combo of wins){
+
+const a=board[combo[0]];
+const b=board[combo[1]];
+const c=board[combo[2]];
+
+if(a==="" || b==="" || c==="")
+continue;
+
+if(a===b && b===c){
+
+won=true;
+
+combo.forEach(i=>{
+cells[i].style.background="#333";
+});
+
+break;
+
+}
+
+}
+
+if(won){
+
+status.textContent="🎉 Player "+currentPlayer+" Wins!";
+gameRunning=false;
+return;
+
+}
+
+if(!board.includes("")){
+
+status.textContent="🤝 It's a Draw!";
+gameRunning=false;
+return;
+
+}
+
+currentPlayer=currentPlayer==="X"?"O":"X";
+
+status.textContent="Player "+currentPlayer+"'s Turn";
+
+}
+
+function resetGame(){
+
+board=["","","","","","","","",""];
+
+currentPlayer="X";
+
+gameRunning=true;
+
+status.textContent="Player X's Turn";
+
+cells.forEach(cell=>{
+cell.textContent="";
+cell.style.background="#111";
+});
+
+}
+
+</script>
+
 </body>
 </html>
