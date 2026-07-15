@@ -1,263 +1,76 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tic Tac Toe</title>
-
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
-}
-
-body{
-background:#ffffff;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-}
-
-.phone{
-width:100%;
-max-width:430px;
-aspect-ratio:9/16;
-background:#ffffff;
-display:flex;
-justify-content:center;
-align-items:center;
-padding:20px;
-}
-
-.container{
-background:#000;
-color:#fff;
-width:100%;
-height:100%;
-border-radius:25px;
-display:flex;
-flex-direction:column;
-align-items:center;
-padding:25px;
-box-shadow:0 10px 30px rgba(0,0,0,.25);
-}
-
-h1{
-font-size:34px;
-margin-bottom:15px;
-}
-
-#status{
-font-size:22px;
-margin-bottom:25px;
-font-weight:bold;
-text-align:center;
-min-height:30px;
-}
-
-.board{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:12px;
-width:100%;
-max-width:320px;
-}
-
-.cell{
-background:#111;
-border:3px solid #fff;
-aspect-ratio:1;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:64px;
-font-weight:bold;
-cursor:pointer;
-border-radius:18px;
-transition:.2s;
-user-select:none;
-}
-
-.cell:hover{
-background:#222;
-}
-
-.reset{
-margin-top:30px;
-width:100%;
-max-width:320px;
-padding:16px;
-background:#000;
-color:#fff;
-border:2px solid #fff;
-font-size:22px;
-font-weight:bold;
-border-radius:14px;
-cursor:pointer;
-transition:.2s;
-}
-
-.reset:hover{
-background:#222;
-}
-
-.footer{
-margin-top:auto;
-font-size:18px;
-padding-top:20px;
-color:#fff;
-}
-</style>
-</head>
-
-<body>
-
-<div class="phone">
-
-<div class="container">
-
-<h1>Tic Tac Toe</h1>
-
-<div id="status">
-Player X's Turn
-</div>
-
-<div class="board">
-
-<div class="cell" data-index="0"></div>
-<div class="cell" data-index="1"></div>
-<div class="cell" data-index="2"></div>
-
-<div class="cell" data-index="3"></div>
-<div class="cell" data-index="4"></div>
-<div class="cell" data-index="5"></div>
-
-<div class="cell" data-index="6"></div>
-<div class="cell" data-index="7"></div>
-<div class="cell" data-index="8"></div>
-
-</div>
-
-<button class="reset" onclick="resetGame()">
-Reset Game
-</button>
-
-<div class="footer">
-Tapfone © 2026
-</div>
-
-</div>
-
-</div>
-
-<script>
-
-const cells=document.querySelectorAll(".cell");
-const status=document.getElementById("status");
-
-let board=["","","","","","","","",""];
-let currentPlayer="X";
-let gameRunning=true;
-
-const wins=[
-[0,1,2],
-[3,4,5],
-[6,7,8],
-[0,3,6],
-[1,4,7],
-[2,5,8],
-[0,4,8],
-[2,4,6]
-];
-
-cells.forEach(cell=>{
-cell.addEventListener("click",cellClicked);
-});
-
-function cellClicked(){
-
-const index=this.dataset.index;
-
-if(board[index]!=="" || !gameRunning)
-return;
-
-board[index]=currentPlayer;
-this.textContent=currentPlayer;
-
-checkWinner();
-
-}
-
-function checkWinner(){
-
-let won=false;
-
-for(let combo of wins){
-
-const a=board[combo[0]];
-const b=board[combo[1]];
-const c=board[combo[2]];
-
-if(a==="" || b==="" || c==="")
-continue;
-
-if(a===b && b===c){
-
-won=true;
-
-combo.forEach(i=>{
-cells[i].style.background="#333";
-});
-
-break;
-
-}
-
-}
-
-if(won){
-
-status.textContent="🎉 Player "+currentPlayer+" Wins!";
-gameRunning=false;
-return;
-
-}
-
-if(!board.includes("")){
-
-status.textContent="🤝 It's a Draw!";
-gameRunning=false;
-return;
-
-}
-
-currentPlayer=currentPlayer==="X"?"O":"X";
-
-status.textContent="Player "+currentPlayer+"'s Turn";
-
-}
-
-function resetGame(){
-
-board=["","","","","","","","",""];
-
-currentPlayer="X";
-
-gameRunning=true;
-
-status.textContent="Player X's Turn";
-
-cells.forEach(cell=>{
-cell.textContent="";
-cell.style.background="#111";
-});
-
-}
-
-</script>
-
-</body>
+ <head><script>window["__codeletBootstrap__"]=JSON.parse('{"A":"A","B":"20260715-05-d05fd84"}');</script><script src="/_sdk/f432b76fb310b513.telemetry_sdk.js" integrity="sha512-9FJQ55EKmmqhyyik8BhrMVfm0+iYYfb8uOlRsjtkxJMEI97qOVEI4PnHohDjQAtvAep0IOEpdQ64eki0sz62ug=="></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stopwatch</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Space+Mono&amp;display=swap" rel="stylesheet">
+  <style>
+        body { font-family: 'DM Sans', sans-serif; }
+        .time-display { font-family: 'Space Mono', monospace; }
+    </style>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js" type="text/javascript"></script>
+  <script src="/_sdk/e3937a0574eb2d69.data_sdk.js" type="text/javascript" integrity="sha512-xbp/ACqEQy1aDxYMtXTrR3y5MUbzxuggRR/9sD48Gl4VhLMMCiAHsxMaFV6DTdeBpR6ymF+t2zhPKYkWM3+Jfw=="></script>
+  <script src="/_sdk/9432170dbd2ae0df.resizing_sdk.js" type="text/javascript" integrity="sha512-FeT+58sb1f9ejWPWFjCbJvTT+SDwGV+ngrHUnlO7TWEOoqwOLj6p256kO3vOL7DIWl1cIgrobiof8v2bOigwPg=="></script>
+ </head>
+ <body data-template-id="__page-root" class="min-h-screen flex flex-col items-center justify-between p-6">
+  <header class="w-full text-center pt-4">
+   <h1 data-template-id="app-title" class="canva-text font-bold"></h1>
+  </header>
+  <main class="flex flex-col items-center gap-8 w-full max-w-sm">
+   <div class="time-display text-6xl font-bold tracking-tight text-center text-white" id="display">
+    00:00.00
+   </div>
+   <div class="grid grid-cols-2 gap-3 w-full">
+    <button data-template-id="start-btn" class="canva-button py-3 rounded-xl font-semibold text-lg" id="start-btn" onclick="startTimer()"></button> <button data-template-id="stop-btn" class="canva-button py-3 rounded-xl font-semibold text-lg" id="stop-btn" onclick="stopTimer()"></button> <button data-template-id="reset-btn" class="canva-button py-3 rounded-xl font-semibold text-lg" id="reset-btn" onclick="resetTimer()"></button> <button data-template-id="lap-btn" class="canva-button py-3 rounded-xl font-semibold text-lg" id="lap-btn" onclick="recordLap()"></button>
+   </div>
+   <div id="lap-list" class="w-full space-y-2 max-h-48 overflow-y-auto bg-white rounded-lg p-4"></div>
+  </main>
+  <footer class="w-full text-center pb-4">
+   <p data-template-id="footer-text" class="canva-text text-sm"></p>
+  </footer>
+  <script src="/_sdk/0e8f359d3c23f6d5.editing_sdk.js" integrity="sha512-CBLuYm/olmgyMedTtPRFeqCRZcSWUh6/39ewyXAbnr1dsVHBACzZ59KGJZXvuWNHOHixfWegfuMN9JzmLEDIoA=="></script>
+  <script>
+        let elapsed = 0, interval = null, lapCount = 0;
+
+        function formatTime(ms) {
+            const min = Math.floor(ms / 60000);
+            const sec = Math.floor((ms % 60000) / 1000);
+            const cs = Math.floor((ms % 1000) / 10);
+            return `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}.${String(cs).padStart(2,'0')}`;
+        }
+
+        function startTimer() {
+            if (interval) return;
+            const start = Date.now() - elapsed;
+            interval = setInterval(() => {
+                elapsed = Date.now() - start;
+                document.getElementById('display').textContent = formatTime(elapsed);
+            }, 10);
+        }
+
+        function stopTimer() {
+            clearInterval(interval);
+            interval = null;
+        }
+
+        function resetTimer() {
+            stopTimer();
+            elapsed = 0;
+            document.getElementById('display').textContent = '00:00.00';
+            document.getElementById('lap-list').innerHTML = '';
+            lapCount = 0;
+        }
+
+        function recordLap() {
+            if (!interval && elapsed === 0) return;
+            lapCount++;
+            const div = document.createElement('div');
+            div.className = 'flex justify-between px-4 py-2 bg-white/10 rounded-lg text-sm';
+            div.innerHTML = `<span>Lap ${lapCount}</span><span class="time-display">${formatTime(elapsed)}</span>`;
+            document.getElementById('lap-list').prepend(div);
+        }
+    </script>
+ </body>
 </html>
