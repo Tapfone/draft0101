@@ -1,2 +1,308 @@
-<p style="text-align: center;"><img src="https://uploads.onecompiler.io/43a28xmes/1784152014065/Tapfone.png" alt="" width="900" height="225" /></p>
-<p>&nbsp;</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashlight App</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background-color: #0a0a0c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        /* 9:16 Aspect Ratio Container */
+        .app-container {
+            width: 100vw;
+            height: calc(100vw * 16 / 9);
+            max-width: 450px;
+            max-height: 800px;
+            background: linear-gradient(145deg, #141419, #0b0b0d);
+            border-radius: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 20px;
+            border: 4px solid #1f1f24;
+            overflow: hidden;
+        }
+
+        /* Screen glow simulation when light is on */
+        .app-container.active-screen {
+            background: #ffffff;
+            border-color: #e0e0e0;
+            box-shadow: 0 0 100px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Status Header */
+        .header {
+            text-align: center;
+            margin-top: 20px;
+            z-index: 10;
+        }
+
+        .status-text {
+            color: #8e8e93;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            transition: color 0.3s;
+        }
+
+        .mode-text {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        /* Active Text Styles */
+        .active-screen .status-text {
+            color: #636366;
+        }
+        
+        .active-screen .mode-text {
+            color: #1c1c1e;
+        }
+
+        /* Main Power Button */
+        .power-btn-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .power-btn {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1c1c22, #0d0d11);
+            border: none;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 
+                -8px -8px 20px rgba(255,255,255,0.03),
+                8px 8px 20px rgba(0,0,0,0.5),
+                inset 1px 1px 0px rgba(255,255,255,0.05);
+            transition: all 0.2s ease;
+        }
+
+        .power-btn:active {
+            transform: scale(0.96);
+        }
+
+        .power-icon {
+            width: 50px;
+            height: 50px;
+            fill: none;
+            stroke: #3a3a3c;
+            stroke-width: 4;
+            stroke-linecap: round;
+            transition: stroke 0.3s, filter 0.3s;
+        }
+
+        /* ON State Button UI */
+        .app-container.torch-on .power-btn,
+        .app-container.active-screen .power-btn {
+            background: linear-gradient(135deg, #2c2c35, #15151a);
+            box-shadow: 
+                -4px -4px 15px rgba(255,255,255,0.02),
+                4px 4px 15px rgba(0,0,0,0.6),
+                inset 0px 0px 15px rgba(0, 229, 255, 0.1);
+        }
+
+        .app-container.torch-on .power-icon,
+        .app-container.active-screen .power-icon {
+            stroke: #00e5ff;
+            filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.8));
+        }
+
+        /* Bottom Controls / Mode Toggles */
+        .controls-panel {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 24px;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background 0.3s, border 0.3s;
+        }
+
+        .active-screen .controls-panel {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: #8e8e93;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            flex: 1;
+            transition: color 0.3s;
+        }
+
+        .control-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+            transition: transform 0.2s;
+        }
+
+        .control-btn:active svg {
+            transform: scale(0.9);
+        }
+
+        .control-btn.active {
+            color: #00e5ff;
+        }
+
+        .active-screen .control-btn {
+            color: #636366;
+        }
+
+        .active-screen .control-btn.active {
+            color: #00b4d8;
+        }
+
+        /* Native Flashlight Warning Banner (Hidden by default) */
+        .error-banner {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(255, 59, 48, 0.15);
+            border: 1px solid rgba(255, 59, 48, 0.3);
+            color: #ff453a;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            text-align: center;
+            z-index: 20;
+            display: none;
+            backdrop-filter: blur(5px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container" id="app">
+        <!-- Error alert for hardware access limitations -->
+        <div class="error-banner" id="errorBanner">
+            Hardware light requires HTTPS / mobile browser. Using screen light instead.
+        </div>
+
+        <!-- Header Status -->
+        <div class="header">
+            <p class="status-text" id="statusText">Status: Off</p>
+            <h1 class="mode-text" id="modeText">Torch Light</h1>
+        </div>
+
+        <!-- Center Power Switch -->
+        <div class="power-btn-container">
+            <button class="power-btn" id="powerBtn" aria-label="Toggle Light">
+                <svg class="power-icon" viewBox="0 0 24 24">
+                    <path d="M12 2v10M18.36 5.64a9 9 0 1 1-12.73 0" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mode Selectors -->
+        <div class="controls-panel">
+            <button class="control-btn active" id="torchModeBtn">
+                <svg viewBox="0 0 24 24"><path d="M12 22a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3zm6.6-13.6A7.4 7.4 0 0 0 12 2a7.4 7.4 0 0 0-6.6 6.4c0 3.2 2.1 5.8 4.6 6.9V18h4v-2.7c2.5-1.1 4.6-3.7 4.6-6.9z"/></svg>
+                Torch
+            </button>
+            <button class="control-btn" id="screenModeBtn">
+                <svg viewBox="0 0 24 24"><path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm0 2v14h10V4H7z"/></svg>
+                Screen
+            </button>
+            <button class="control-btn" id="strobeModeBtn">
+                <svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                Strobe
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // State Management
+        let isLightOn = false;
+        let currentMode = 'torch'; // torch, screen, strobe
+        let videoStream = null;
+        let track = null;
+        let strobeInterval = null;
+        let strobeState = false;
+
+        // DOM Elements
+        const app = document.getElementById('app');
+        const powerBtn = document.getElementById('powerBtn');
+        const statusText = document.getElementById('statusText');
+        const modeText = document.getElementById('modeText');
+        const errorBanner = document.getElementById('errorBanner');
+        
+        const torchModeBtn = document.getElementById('torchModeBtn');
+        const screenModeBtn = document.getElementById('screenModeBtn');
+        const strobeModeBtn = document.getElementById('strobeModeBtn');
+
+        // Initialize Camera Stream for Torch Hardware
+        async function initCamera() {
+            if (currentMode === 'screen') return true;
+            if (track) return true;
+
+            try {
+                const constraints = {
+                    video: { facingMode: { exact: "environment" } }
+                };
+                
+                // Fallback to any camera if environment/rear camera is not specifically found
+                videoStream = await navigator.mediaDevices.getUserMedia(constraints).catch(() => {
+                    return navigator.mediaDevices.getUserMedia({ video: true });
+                });
+
+                track = videoStream.getVideoTracks()[0];
+                
+                // Check if torch feature is supported by hardware
+                const capabilities = track.getCapabilities();
+                if (!capabilities.torch) {
+                    showHardwareError("Hardware flash not supported on this device.");
+                    return false;
+                }
+                return true;
+            } catch (err) {
+                console.error("Camera access failed: ", err);
+                showHardwareError("Camera access denied or unavailable.");
+                return false;
+            }
+        }
+
