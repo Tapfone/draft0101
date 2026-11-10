@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,20 +14,39 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(145deg, #063b2b, #0b583b, #062e24);
-    color: white;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    background: #10291e;
+    font-family: 'Arial', sans-serif;
     overflow-x: hidden;
-    padding: 20px;
+    color: white;
 }
 
-/* Snow animation */
-.snowflake {
-    position: fixed;
+.app {
+    width: 100%;
+    max-width: 430px;
+    aspect-ratio: 9 / 16;
+    min-height: 650px;
+    max-height: 850px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    padding: 30px 22px;
+    background:
+        radial-gradient(circle at top, #286441, transparent 48%),
+        linear-gradient(160deg, #17452e, #09251a 80%);
+    border: 4px solid #d8ad50;
+    border-radius: 25px;
+    box-shadow: 0 15px 50px #0008;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.snow {
+    position: absolute;
     top: -20px;
     color: white;
     pointer-events: none;
@@ -37,166 +57,166 @@ body {
 
 @keyframes snowfall {
     0% {
-        transform: translateY(-10vh) translateX(0);
+        transform: translateY(-20px) translateX(0);
+        opacity: 0;
     }
+    15% { opacity: 0.9; }
     100% {
-        transform: translateY(110vh) translateX(50px);
+        transform: translateY(900px) translateX(45px);
+        opacity: 0;
     }
 }
 
-.container {
-    width: 100%;
-    max-width: 480px;
-    min-height: 750px;
-    background: linear-gradient(160deg, #a30e25, #750b20);
-    border: 3px solid #e6bd61;
-    border-radius: 28px;
-    padding: 30px 22px;
-    text-align: center;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+.content {
     position: relative;
     z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    gap: 25px;
+    width: 100%;
 }
 
 .top-decoration {
-    font-size: 42px;
-    letter-spacing: 8px;
-}
-
-h1 {
-    font-family: Georgia, serif;
-    font-size: clamp(35px, 9vw, 48px);
-    color: #ffe6a0;
-    text-shadow: 2px 3px 5px #48000c;
-    margin-top: 10px;
-}
-
-.subtitle {
-    color: #fff1d0;
-    font-size: 16px;
-    margin-top: 12px;
-    letter-spacing: 2px;
-}
-
-.christmas-tree {
-    font-size: 90px;
-    margin: 5px 0;
-    animation: glow 2s ease-in-out infinite alternate;
+    font-size: 43px;
+    margin: 10px 0 8px;
+    animation: glow 2s infinite alternate;
 }
 
 @keyframes glow {
-    from { filter: drop-shadow(0 0 4px #e8c65c); }
-    to { filter: drop-shadow(0 0 20px #ffe7a0); }
+    from { filter: drop-shadow(0 0 3px #ffdc75); }
+    to { filter: drop-shadow(0 0 16px #ffdc75); }
 }
 
-.countdown-title {
+h1 {
+    color: #ffdf87;
+    font-size: 37px;
     font-family: Georgia, serif;
-    font-size: 24px;
-    color: #ffdf88;
-    margin-bottom: 18px;
+    text-shadow: 2px 3px 5px #0008;
+    margin-bottom: 8px;
 }
 
-.countdown {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
+.subtitle {
+    font-size: 15px;
+    color: #e8f3e9;
+    letter-spacing: 2px;
+    margin-bottom: 22px;
 }
 
-.time-box {
-    background: linear-gradient(145deg, #fff5df, #e8d4a8);
-    color: #a00e25;
-    padding: 18px 4px;
-    border-radius: 14px;
-    border: 2px solid #d9ae53;
-    box-shadow: 0 5px 12px rgba(0,0,0,0.2);
-}
-
-.time-box span {
-    display: block;
-    font-size: clamp(25px, 7vw, 34px);
-    font-weight: bold;
-    font-variant-numeric: tabular-nums;
-}
-
-.time-box small {
-    font-size: 11px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    margin-top: 7px;
-    display: block;
+.tree {
+    font-size: 105px;
+    line-height: 1.2;
+    margin: 5px 0 15px;
+    filter: drop-shadow(0 5px 10px #0008);
 }
 
 .message {
-    color: #ffe9b7;
-    font-family: Georgia, serif;
-    font-size: 20px;
-    line-height: 1.5;
+    color: #ffdf87;
+    font-size: 19px;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
-.christmas-date {
-    color: #ffdc82;
+.countdown {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    width: 100%;
+}
+
+.time-box {
+    background: linear-gradient(145deg, #fff, #e7e7e7);
+    border: 2px solid #e0b84f;
+    border-radius: 13px;
+    padding: 14px 3px;
+    color: #155033;
+    box-shadow: 0 5px 12px #0005;
+}
+
+.number {
+    display: block;
+    font-size: 30px;
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
+}
+
+.label {
+    display: block;
+    font-size: 10px;
     font-weight: bold;
+    letter-spacing: 1px;
+    margin-top: 5px;
+}
+
+.date {
+    color: #fff1c1;
     font-size: 15px;
-    letter-spacing: 1px;
+    margin-top: 22px;
+    line-height: 1.7;
 }
 
-.buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
+.divider {
+    width: 75%;
+    height: 2px;
+    background: #d9b65c;
+    margin: 22px auto;
 }
 
-button {
-    width: 100%;
-    padding: 15px;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
+.greeting {
+    font-family: Georgia, serif;
+    font-size: 24px;
+    color: #ffdf87;
+    margin-bottom: 8px;
 }
 
-button:hover {
-    transform: scale(1.03);
-}
-
-.snow-button {
-    background: #f7e6bb;
-    color: #145337;
-}
-
-.share-button {
-    background: #146b42;
-    color: white;
-    border: 2px solid #e8c46d;
-}
-
-footer {
-    width: 100%;
-    border-top: 1px solid rgba(255,255,255,0.3);
-    padding-top: 18px;
-    color: #f8dfac;
+.description {
+    color: #e2eee4;
     font-size: 13px;
-    letter-spacing: 1px;
+    line-height: 1.6;
 }
 
-@media(max-width: 380px) {
-    .container {
-        padding: 22px 14px;
+.decorations {
+    font-size: 27px;
+    margin-top: 22px;
+    letter-spacing: 8px;
+}
+
+.footer {
+    margin-top: auto;
+    padding-top: 15px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #e8d69c;
+    position: relative;
+    z-index: 2;
+}
+
+@media (max-width: 450px) {
+    body {
+        background: #10291e;
     }
-    .time-box {
-        padding: 14px 2px;
+
+    .app {
+        border-radius: 0;
+        border-width: 3px;
+        min-height: 100svh;
+        max-height: none;
+        aspect-ratio: auto;
     }
-    .time-box small {
-        font-size: 9px;
+}
+
+@media (max-height: 720px) {
+    .app {
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+
+    .tree {
+        font-size: 75px;
+    }
+
+    .divider {
+        margin: 12px auto;
+    }
+
+    .top-decoration {
+        margin-top: 3px;
     }
 }
 </style>
@@ -204,112 +224,118 @@ footer {
 
 <body>
 
-<div id="snow"></div>
+<div class="app" id="app">
 
-<main class="container">
+    <div class="content">
 
-    <div>
-        <div class="top-decoration">🎄 ✨ 🎄</div>
+        <div class="top-decoration">🎅 🎄 ⭐ 🎄 🎅</div>
 
-        <h1>Christmas<br>Countdown</h1>
+        <h1>Christmas</h1>
+        <div class="subtitle">COUNTDOWN</div>
 
-        <p class="subtitle">THE MOST WONDERFUL TIME OF THE YEAR</p>
-    </div>
+        <div class="tree">🎄</div>
 
-    <div class="christmas-tree">🎄</div>
-
-    <div style="width:100%">
-
-        <h2 class="countdown-title" id="heading">
-            Christmas Is Coming!
-        </h2>
+        <div class="message" id="message">
+            Christmas is Coming!
+        </div>
 
         <div class="countdown">
 
             <div class="time-box">
-                <span id="days">000</span>
-                <small>DAYS</small>
+                <span class="number" id="days">00</span>
+                <span class="label">DAYS</span>
             </div>
 
             <div class="time-box">
-                <span id="hours">00</span>
-                <small>HOURS</small>
+                <span class="number" id="hours">00</span>
+                <span class="label">HOURS</span>
             </div>
 
             <div class="time-box">
-                <span id="minutes">00</span>
-                <small>MINUTES</small>
+                <span class="number" id="minutes">00</span>
+                <span class="label">MINS</span>
             </div>
 
             <div class="time-box">
-                <span id="seconds">00</span>
-                <small>SECONDS</small>
+                <span class="number" id="seconds">00</span>
+                <span class="label">SECS</span>
             </div>
 
         </div>
 
-    </div>
+        <div class="date">
+            🎁 December 25, <span id="year"></span> 🎁
+        </div>
 
-    <p class="message" id="message">
-        Making spirits bright!<br>
-        Let the Christmas magic begin!
-    </p>
+        <div class="divider"></div>
 
-    <p class="christmas-date">
-        🎁 DECEMBER 25 🎁
-    </p>
+        <div class="greeting" id="greeting">
+            ✨ Merry Christmas! ✨
+        </div>
 
-    <div class="buttons">
+        <div class="description">
+            May your holidays be filled with
+            love, joy, happiness and magic!
+        </div>
 
-        <button class="snow-button" onclick="toggleSnow()">
-            ❄️ Turn Snow Off
-        </button>
-
-        <button class="share-button" onclick="shareCountdown()">
-            🎅 Share Countdown
-        </button>
+        <div class="decorations">
+            🎁 ❄️ 🔔 ❄️ 🎁
+        </div>
 
     </div>
 
-    <footer>
+    <div class="footer">
         Tapfone © 2026
-    </footer>
+    </div>
 
-</main>
+</div>
 
 <script>
 
-// CHRISTMAS COUNTDOWN
+// Create falling snow
+function createSnow() {
+    const app = document.getElementById("app");
 
-function getChristmasDate() {
+    for (let i = 0; i < 35; i++) {
+        const snow = document.createElement("div");
+
+        snow.className = "snow";
+        snow.innerHTML = "❄";
+
+        snow.style.left = Math.random() * 100 + "%";
+        snow.style.fontSize = (8 + Math.random() * 15) + "px";
+        snow.style.animationDuration =
+            (5 + Math.random() * 10) + "s";
+
+        snow.style.animationDelay =
+            (Math.random() * 10) + "s";
+
+        app.appendChild(snow);
+    }
+}
+
+// Find the next Christmas
+function getChristmas() {
     const now = new Date();
     let year = now.getFullYear();
 
     let christmas = new Date(year, 11, 25, 0, 0, 0);
 
     if (now >= christmas) {
-        christmas = new Date(year + 1, 11, 25, 0, 0, 0);
+        year++;
+        christmas = new Date(year, 11, 25, 0, 0, 0);
     }
 
     return christmas;
 }
 
+// Countdown timer
 function updateCountdown() {
 
     const now = new Date();
-    const christmas = getChristmasDate();
+    const christmas = getChristmas();
 
     const difference = christmas - now;
-
-    if (difference <= 0) {
-        document.getElementById("heading").textContent =
-            "Merry Christmas!";
-
-        document.getElementById("message").innerHTML =
-            "🎄 Wishing You a Magical Christmas! 🎄";
-
-        return;
-    }
 
     const days = Math.floor(
         difference / (1000 * 60 * 60 * 24)
@@ -328,7 +354,7 @@ function updateCountdown() {
     );
 
     document.getElementById("days").textContent =
-        String(days).padStart(3, "0");
+        String(days).padStart(2, "0");
 
     document.getElementById("hours").textContent =
         String(hours).padStart(2, "0");
@@ -339,111 +365,38 @@ function updateCountdown() {
     document.getElementById("seconds").textContent =
         String(seconds).padStart(2, "0");
 
-    document.getElementById("heading").textContent =
-        "Christmas Is Coming!";
+    document.getElementById("year").textContent =
+        christmas.getFullYear();
 
-    document.getElementById("message").innerHTML =
-        "Making spirits bright!<br>Let the Christmas magic begin!";
+    if (days === 0 && hours === 0 && minutes === 0 &&
+        seconds === 0) {
+
+        document.getElementById("message").textContent =
+            "🎄 Merry Christmas! 🎄";
+
+        document.getElementById("greeting").textContent =
+            "🎅 It's Christmas Day! 🎅";
+
+    } else if (days <= 7) {
+
+        document.getElementById("message").textContent =
+            "🎁 Almost Christmas!";
+
+    } else {
+
+        document.getElementById("message").textContent =
+            "Christmas is Coming!";
+    }
 }
 
+// Start app
+createSnow();
 updateCountdown();
 
 setInterval(updateCountdown, 1000);
-
-// FALLING SNOW
-
-let snowEnabled = true;
-
-function createSnow() {
-
-    if (!snowEnabled) return;
-
-    const snow = document.createElement("div");
-
-    snow.className = "snowflake";
-    snow.innerHTML = "❄";
-
-    snow.style.left = Math.random() * 100 + "vw";
-
-    snow.style.fontSize =
-        (Math.random() * 15 + 10) + "px";
-
-    snow.style.animationDuration =
-        (Math.random() * 5 + 5) + "s";
-
-    snow.style.opacity = Math.random();
-
-    document.getElementById("snow").appendChild(snow);
-
-    setTimeout(() => {
-        snow.remove();
-    }, 11000);
-}
-
-let snowInterval = setInterval(createSnow, 250);
-
-// SNOW ON/OFF BUTTON
-
-function toggleSnow() {
-
-    snowEnabled = !snowEnabled;
-
-    const button = document.querySelector(".snow-button");
-
-    if (snowEnabled) {
-
-        button.textContent = "❄️ Turn Snow Off";
-
-        snowInterval = setInterval(createSnow, 250);
-
-    } else {
-
-        button.textContent = "❄️ Turn Snow On";
-
-        clearInterval(snowInterval);
-
-        document.getElementById("snow").innerHTML = "";
-
-    }
-}
-
-// SHARE BUTTON
-
-async function shareCountdown() {
-
-    const christmas = getChristmasDate();
-
-    const shareText =
-        "🎄 Christmas Countdown! 🎅\n" +
-        "Christmas is on December 25, " +
-        christmas.getFullYear() +
-        "!\n" +
-        "Check out the Tapfone Christmas Countdown!";
-
-    if (navigator.share) {
-
-        try {
-            await navigator.share({
-                title: "Christmas Countdown",
-                text: shareText
-            });
-        } catch (error) {
-            // Sharing cancelled or unavailable
-        }
-
-    } else {
-
-        try {
-            await navigator.clipboard.writeText(shareText);
-            alert("Christmas countdown copied! 🎄");
-        } catch (error) {
-            alert(shareText);
-        }
-
-    }
-}
 
 </script>
 
 </body>
 </html>
+
