@@ -1,17 +1,449 @@
-<p style="text-align: center;"><a href="https://www.tapfone.com/"><img src="https://uploads.onecompiler.io/43wkmw2n3/1793568797088/tapfone.logo.20261031.png" alt="" width="900" height="225" /></a></p>
-<p style="text-align: center;"><img src="https://uploads.onecompiler.io/43wkmw2n3/1793571322185/SOCIAL%20MEDIA.4545.png" alt="" width="900" height="225" /></p>
-<p style="text-align: center;"><a href="https://www.facebook.com/"><img src="https://uploads.onecompiler.io/43wkmw2n3/1793570478400/FACEBOOK.35465.png" alt="" width="900" height="225" /></a></p>
-<p style="text-align: center;"><a href="https://www.instagram.com/"><img src="https://uploads.onecompiler.io/43wkmw2n3/1793570474565/INSTAGRAM.343.png" alt="" width="900" height="225" /></a></p>
-<p style="text-align: center;"><a href="https://linkedin.com/"><img src="https://uploads.onecompiler.io/43wkmw2n3/1793570470519/LINKEDIN.4657.png" width="900" height="225" /></a></p>
-<p style="text-align: center;"><a href="https://www.reddit.com/"><img src="https://uploads.onecompiler.io/43wkmw2n3/1793570466243/REDDIT.454.png" alt="" width="900" height="225" /></a></p>
-<p style="text-align: center;"><a href="https://www.snapchat.com/"><img src="https://uploads.onecompiler.io/43wkmw2n3/1793570462233/SNAPCHAT.565.png" alt="" width="900" height="225" /></a></p>
-<p style="text-align: center;"><a href="https://www.tiktok.com/"><img src="https://uploads.onecompiler.io/43wkmw2n3/1793570458479/TIKTOK.454.png" alt="" width="900" height="225" /></a></p>
-<p style="text-align: center;"><img src="https://uploads.onecompiler.io/43wkmw2n3/1793570454742/X.4545.png" alt="" width="900" height="225" /></p>
-<p style="text-align: center;"><a href="https://www.youtube.com/"><img src="https://uploads.onecompiler.io/43wkmw2n3/1793570451227/YOUTUBE.35465.png" alt="" width="900" height="225" /></a></p>
-<p style="text-align: center;"><img src="https://uploads.onecompiler.io/43wkmw2n3/3wxcpbe5b/tapfone.com.2026.png" alt="" width="400" height="100" /></p>
-<p style="text-align: center;">&nbsp;</p>
-<p style="text-align: center;">&nbsp;</p>
-<p style="text-align: center;">&nbsp;</p>
-<p style="text-align: center;">&nbsp;</p>
-<p style="text-align: center;">&nbsp;</p>
-<p style="text-align: center;">&nbsp;</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Christmas Countdown | Tapfone</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(145deg, #063b2b, #0b583b, #062e24);
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    padding: 20px;
+}
+
+/* Snow animation */
+.snowflake {
+    position: fixed;
+    top: -20px;
+    color: white;
+    pointer-events: none;
+    animation: snowfall linear infinite;
+    z-index: 1;
+    opacity: 0.8;
+}
+
+@keyframes snowfall {
+    0% {
+        transform: translateY(-10vh) translateX(0);
+    }
+    100% {
+        transform: translateY(110vh) translateX(50px);
+    }
+}
+
+.container {
+    width: 100%;
+    max-width: 480px;
+    min-height: 750px;
+    background: linear-gradient(160deg, #a30e25, #750b20);
+    border: 3px solid #e6bd61;
+    border-radius: 28px;
+    padding: 30px 22px;
+    text-align: center;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+}
+
+.top-decoration {
+    font-size: 42px;
+    letter-spacing: 8px;
+}
+
+h1 {
+    font-family: Georgia, serif;
+    font-size: clamp(35px, 9vw, 48px);
+    color: #ffe6a0;
+    text-shadow: 2px 3px 5px #48000c;
+    margin-top: 10px;
+}
+
+.subtitle {
+    color: #fff1d0;
+    font-size: 16px;
+    margin-top: 12px;
+    letter-spacing: 2px;
+}
+
+.christmas-tree {
+    font-size: 90px;
+    margin: 5px 0;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { filter: drop-shadow(0 0 4px #e8c65c); }
+    to { filter: drop-shadow(0 0 20px #ffe7a0); }
+}
+
+.countdown-title {
+    font-family: Georgia, serif;
+    font-size: 24px;
+    color: #ffdf88;
+    margin-bottom: 18px;
+}
+
+.countdown {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.time-box {
+    background: linear-gradient(145deg, #fff5df, #e8d4a8);
+    color: #a00e25;
+    padding: 18px 4px;
+    border-radius: 14px;
+    border: 2px solid #d9ae53;
+    box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+}
+
+.time-box span {
+    display: block;
+    font-size: clamp(25px, 7vw, 34px);
+    font-weight: bold;
+    font-variant-numeric: tabular-nums;
+}
+
+.time-box small {
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-top: 7px;
+    display: block;
+}
+
+.message {
+    color: #ffe9b7;
+    font-family: Georgia, serif;
+    font-size: 20px;
+    line-height: 1.5;
+}
+
+.christmas-date {
+    color: #ffdc82;
+    font-weight: bold;
+    font-size: 15px;
+    letter-spacing: 1px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.03);
+}
+
+.snow-button {
+    background: #f7e6bb;
+    color: #145337;
+}
+
+.share-button {
+    background: #146b42;
+    color: white;
+    border: 2px solid #e8c46d;
+}
+
+footer {
+    width: 100%;
+    border-top: 1px solid rgba(255,255,255,0.3);
+    padding-top: 18px;
+    color: #f8dfac;
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+@media(max-width: 380px) {
+    .container {
+        padding: 22px 14px;
+    }
+    .time-box {
+        padding: 14px 2px;
+    }
+    .time-box small {
+        font-size: 9px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="snow"></div>
+
+<main class="container">
+
+    <div>
+        <div class="top-decoration">🎄 ✨ 🎄</div>
+
+        <h1>Christmas<br>Countdown</h1>
+
+        <p class="subtitle">THE MOST WONDERFUL TIME OF THE YEAR</p>
+    </div>
+
+    <div class="christmas-tree">🎄</div>
+
+    <div style="width:100%">
+
+        <h2 class="countdown-title" id="heading">
+            Christmas Is Coming!
+        </h2>
+
+        <div class="countdown">
+
+            <div class="time-box">
+                <span id="days">000</span>
+                <small>DAYS</small>
+            </div>
+
+            <div class="time-box">
+                <span id="hours">00</span>
+                <small>HOURS</small>
+            </div>
+
+            <div class="time-box">
+                <span id="minutes">00</span>
+                <small>MINUTES</small>
+            </div>
+
+            <div class="time-box">
+                <span id="seconds">00</span>
+                <small>SECONDS</small>
+            </div>
+
+        </div>
+
+    </div>
+
+    <p class="message" id="message">
+        Making spirits bright!<br>
+        Let the Christmas magic begin!
+    </p>
+
+    <p class="christmas-date">
+        🎁 DECEMBER 25 🎁
+    </p>
+
+    <div class="buttons">
+
+        <button class="snow-button" onclick="toggleSnow()">
+            ❄️ Turn Snow Off
+        </button>
+
+        <button class="share-button" onclick="shareCountdown()">
+            🎅 Share Countdown
+        </button>
+
+    </div>
+
+    <footer>
+        Tapfone © 2026
+    </footer>
+
+</main>
+
+<script>
+
+// CHRISTMAS COUNTDOWN
+
+function getChristmasDate() {
+    const now = new Date();
+    let year = now.getFullYear();
+
+    let christmas = new Date(year, 11, 25, 0, 0, 0);
+
+    if (now >= christmas) {
+        christmas = new Date(year + 1, 11, 25, 0, 0, 0);
+    }
+
+    return christmas;
+}
+
+function updateCountdown() {
+
+    const now = new Date();
+    const christmas = getChristmasDate();
+
+    const difference = christmas - now;
+
+    if (difference <= 0) {
+        document.getElementById("heading").textContent =
+            "Merry Christmas!";
+
+        document.getElementById("message").innerHTML =
+            "🎄 Wishing You a Magical Christmas! 🎄";
+
+        return;
+    }
+
+    const days = Math.floor(
+        difference / (1000 * 60 * 60 * 24)
+    );
+
+    const hours = Math.floor(
+        (difference / (1000 * 60 * 60)) % 24
+    );
+
+    const minutes = Math.floor(
+        (difference / (1000 * 60)) % 60
+    );
+
+    const seconds = Math.floor(
+        (difference / 1000) % 60
+    );
+
+    document.getElementById("days").textContent =
+        String(days).padStart(3, "0");
+
+    document.getElementById("hours").textContent =
+        String(hours).padStart(2, "0");
+
+    document.getElementById("minutes").textContent =
+        String(minutes).padStart(2, "0");
+
+    document.getElementById("seconds").textContent =
+        String(seconds).padStart(2, "0");
+
+    document.getElementById("heading").textContent =
+        "Christmas Is Coming!";
+
+    document.getElementById("message").innerHTML =
+        "Making spirits bright!<br>Let the Christmas magic begin!";
+}
+
+updateCountdown();
+
+setInterval(updateCountdown, 1000);
+
+// FALLING SNOW
+
+let snowEnabled = true;
+
+function createSnow() {
+
+    if (!snowEnabled) return;
+
+    const snow = document.createElement("div");
+
+    snow.className = "snowflake";
+    snow.innerHTML = "❄";
+
+    snow.style.left = Math.random() * 100 + "vw";
+
+    snow.style.fontSize =
+        (Math.random() * 15 + 10) + "px";
+
+    snow.style.animationDuration =
+        (Math.random() * 5 + 5) + "s";
+
+    snow.style.opacity = Math.random();
+
+    document.getElementById("snow").appendChild(snow);
+
+    setTimeout(() => {
+        snow.remove();
+    }, 11000);
+}
+
+let snowInterval = setInterval(createSnow, 250);
+
+// SNOW ON/OFF BUTTON
+
+function toggleSnow() {
+
+    snowEnabled = !snowEnabled;
+
+    const button = document.querySelector(".snow-button");
+
+    if (snowEnabled) {
+
+        button.textContent = "❄️ Turn Snow Off";
+
+        snowInterval = setInterval(createSnow, 250);
+
+    } else {
+
+        button.textContent = "❄️ Turn Snow On";
+
+        clearInterval(snowInterval);
+
+        document.getElementById("snow").innerHTML = "";
+
+    }
+}
+
+// SHARE BUTTON
+
+async function shareCountdown() {
+
+    const christmas = getChristmasDate();
+
+    const shareText =
+        "🎄 Christmas Countdown! 🎅\n" +
+        "Christmas is on December 25, " +
+        christmas.getFullYear() +
+        "!\n" +
+        "Check out the Tapfone Christmas Countdown!";
+
+    if (navigator.share) {
+
+        try {
+            await navigator.share({
+                title: "Christmas Countdown",
+                text: shareText
+            });
+        } catch (error) {
+            // Sharing cancelled or unavailable
+        }
+
+    } else {
+
+        try {
+            await navigator.clipboard.writeText(shareText);
+            alert("Christmas countdown copied! 🎄");
+        } catch (error) {
+            alert(shareText);
+        }
+
+    }
+}
+
+</script>
+
+</body>
+</html>
